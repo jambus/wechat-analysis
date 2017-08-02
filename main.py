@@ -2,6 +2,7 @@
 
 import sys
 import sqlite3
+import re
 
 # main function to do anylsis of wechat chatting history
 __default__MM__path = './data/MM.sqlite'
@@ -18,15 +19,26 @@ def loadWechatSQLLib(mmPath, contactPath):
 	
 	conn = sqlite3.connect(mmPath)
 	cursor = conn.cursor()
-	#cursor.execute('show tables')
-	cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-	tableNameList = cursor.fetchall()
-	print(tableNameList)
+
+	tableNameList = listTableNames(cursor)
+	#print(tableNameList)
+
+	chatTableNameList = filter(isChatTable,tableNameList)
+	print(chatTableNameList)
 
 	cursor.close()
 	#conn.commit()
 	conn.close()
 	return
+
+def listTableNames(cursor):
+	cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+	return cursor.fetchall()
+
+
+isChatTablePattern = re.compile(r'^Chat_([0-9a-z]+)$')
+def isChatTable(tuple):
+	return isChatTablePattern.match(tuple[0])
 
 def main():
 	args = sys.argv
