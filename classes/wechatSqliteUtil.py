@@ -47,6 +47,10 @@ class WechatSqliteUtil(object):
 		self._cursorMM.execute("SELECT name FROM sqlite_master WHERE type='table';")
 		return self._cursorMM.fetchall()
 
+	def listChatRooms(self):
+		self._cursorContact.execute("SELECT userName, cast(dbContactRemark as TEXT) FROM Friend WHERE userName like '%@chatroom';")
+		return self._cursorContact.fetchall()
+
 	def _isChatTable(self,tuple):
 		if(not hasattr(self,'_chatTablePattern')):
 			self._chatTablePattern = re.compile(r'^Chat_([0-9a-z]{32})$')
@@ -54,14 +58,18 @@ class WechatSqliteUtil(object):
 
 	def findChatRoomTableByRoomName(self,targetChatRoomName):
 		tableNameList = self.listTableNames()
-		#print(tableNameList)
 
 		chatTableNameList = filter(self._isChatTable,tableNameList)
-		print(chatTableNameList)
+		#print(chatTableNameList)
 
-		#for table in chatTableNameList:
-		#	if table[0] == targetChatRoomName:
-		#		return True
-		#return False
+		chatRoomList = self.listChatRooms()
+		print(chatRoomList)
 
-		return
+		for table in chatRoomList:
+			if targetChatRoomName in table[1]:
+				print('Find room ' + targetChatRoomName + ' , Room id is:'+ table[0])
+				return table[0]
+
+		print('Room not found')
+		return None
+
