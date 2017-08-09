@@ -2,6 +2,7 @@
 
 import sqlite3
 import re
+import hashlib
 
 class WechatSqliteUtil(object):
 
@@ -56,20 +57,36 @@ class WechatSqliteUtil(object):
 			self._chatTablePattern = re.compile(r'^Chat_([0-9a-z]{32})$')
 		return self._chatTablePattern.match(tuple[0])
 
-	def findChatRoomTableByRoomName(self,targetChatRoomName):
-		tableNameList = self.listTableNames()
+	def findChatRoomIdByRoomName(self,targetChatRoomName):
+		roomList = self.listChatRooms()
+		#print(roomList)
 
-		chatTableNameList = filter(self._isChatTable,tableNameList)
-		#print(chatTableNameList)
-
-		chatRoomList = self.listChatRooms()
-		print(chatRoomList)
-
-		for table in chatRoomList:
+		for table in roomList:
 			if targetChatRoomName in table[1]:
 				print('Find room ' + targetChatRoomName + ' , Room id is:'+ table[0])
 				return table[0]
 
 		print('Room not found')
 		return None
+
+	def findChatRoomTableByRoomId(self,targetRoomId):
+		hash_md5 = hashlib.md5(targetRoomId.encode('utf-8')) 
+		hashValue = hash_md5.hexdigest()
+		targetRoomTableName = 'Chat_' + hashValue
+
+		tableNameList = self.listTableNames()
+		chatTableNameList = filter(self._isChatTable,tableNameList)
+		#print(chatTableNameList)
+
+		for table in chatTableNameList:
+			if table[0] == targetRoomTableName:
+				print('Find chat room for ' + targetRoomId + ' , Room table name is:'+ table[0])
+				return table[0]
+		print('Chat room not found')
+		return None
+
+	def getChatHistoryByChatRoomTable(self, chatRoomTable):
+		self._cursorMM.execute("SELECT CreateTime,Message,Status,Type,Des FROM "+ chatRoomTable)
+		return self._cursorMM.fetchall()
+
 

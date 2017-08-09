@@ -3,23 +3,45 @@
 import sys
 
 from classes.wechatSqliteUtil import WechatSqliteUtil
+from classes.wechatMessageAnalysis import WechatMessageAnalysis
 
+#Sample run command:
+#python3 main.py "Bb SHA"
 def main():
 	args = sys.argv
-	print (args)
+	print('Paramters:')
+	print(args)
 	argslength = len(args)
 
-	if argslength == 1:
-		wechatSqliteUtil = WechatSqliteUtil(None,None)
+	if argslength < 2:
+		print('Missing arguments!')
+		exit(0)
 	elif argslength == 2:
-		wechatSqliteUtil = WechatSqliteUtil(args[1],None)
+		wechatSqliteUtil = WechatSqliteUtil(None,None)
 	elif argslength == 3:
-		wechatSqliteUtil = WechatSqliteUtil(args[1],args[2])
+		wechatSqliteUtil = WechatSqliteUtil(args[2],None)
+	elif argslength == 4:
+		wechatSqliteUtil = WechatSqliteUtil(args[2],args[3])
 	else:
 		print('Too many arguments!')
 		exit(0)
+
+	targetRoomName = args[1]
+
 	wechatSqliteUtil.loadWechatDB()
-	wechatSqliteUtil.findChatRoomTableByRoomName('Bb SHA')
+	roomId = wechatSqliteUtil.findChatRoomIdByRoomName(targetRoomName)
+	if(roomId == None):
+		return None
+
+	targetChatTable =  wechatSqliteUtil.findChatRoomTableByRoomId(roomId)
+	if(targetChatTable == None):
+		return None
+	chatHistory = wechatSqliteUtil.getChatHistoryByChatRoomTable(targetChatTable)
+	print(chatHistory)
+
+	wechatMessageAnalysis =  WechatMessageAnalysis()
+	wechatMessageAnalysis.handleChatHistoryData(chatHistory)
+
 	wechatSqliteUtil.closeWechatDB()
 	print('Done')
 
