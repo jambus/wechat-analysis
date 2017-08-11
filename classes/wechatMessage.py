@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+from classes.wechatMessageType import WechatMessageType
 
 class WechatMessage(object):
 
@@ -7,7 +7,7 @@ class WechatMessage(object):
 		self._sender = None
 		self._message = None
 		self._status = None
-		self._type = None
+		self._type = WechatMessageType.UNHANDLED
 		self._isMyMessage = False
 		pass
 

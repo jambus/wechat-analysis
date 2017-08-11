@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 import datetime as dt
 
 from classes.wechatMessage import WechatMessage
+from classes.wechatMessageType import WechatMessageType
 
 class WechatMessageAnalysis(object):
 
@@ -20,9 +19,14 @@ class WechatMessageAnalysis(object):
 			message.sender = self._getMessageSender(record)
 			message.message = self._getMessageBody(record)
 			message.status = record[2]
-			message.type = record[3]
-			message.isMyMessage = (record[4] == 0)
 
+			try:
+				message.type = WechatMessageType(record[3])
+			except ValueError:
+				print('Unhandled message type' + str(record[3]))
+				message.type = WechatMessageType.UNHANDLED
+			
+			message.isMyMessage = (record[4] == 0)
 			historyList.append(message)
 
 		return historyList
