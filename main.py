@@ -37,10 +37,10 @@ def main():
 	if(targetChatTable == None):
 		return None
 	chatHistory = wechatSqliteUtil.getChatHistoryByChatRoomTable(targetChatTable)
-	print(chatHistory)
 
 	wechatMessageAnalysis =  WechatMessageAnalysis()
-	wechatMessageAnalysis.handleChatHistoryData(chatHistory)
+	wechatMessageList = wechatMessageAnalysis.handleChatHistoryData(chatHistory)
+	wechatMessageAnalysis.printChatHistoryData(wechatMessageList)
 
 	wechatSqliteUtil.closeWechatDB()
 	print('Done')
