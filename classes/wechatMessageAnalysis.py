@@ -2,10 +2,12 @@ import datetime as dt
 
 from classes.wechatMessage import WechatMessage
 from classes.wechatMessageType import WechatMessageType
+from classes.wechatAnalysisInterface import WechatAnalysisInterface
 
 class WechatMessageAnalysis(object):
 
 	def __init__(self):
+		self._analysiserList = []
 		pass
 
 	def handleChatHistoryData(self,data):
@@ -57,3 +59,19 @@ class WechatMessageAnalysis(object):
 
 		print(formatRecordStr)
 		pass
+
+	def registerAnalysiser(self, wechatAnalysisers):
+		if isinstance(wechatAnalysisers, WechatAnalysisInterface):
+			self._analysiserList.append(wechatAnalysisers)
+		else:
+			print('Fail to load wechatAnalysiser' + str(wechatAnalysisers))
+
+	def executeAnalysis(self,dataList):
+		if len(self._analysiserList) == 0:
+			pass
+
+		for anaylsiser in self._analysiserList:
+			anaylsiser.execute(dataList)
+
+		print('Anaylsis done')
+

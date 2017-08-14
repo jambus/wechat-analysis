@@ -5,6 +5,8 @@ import sys
 from classes.wechatSqliteUtil import WechatSqliteUtil
 from classes.wechatMessageAnalysis import WechatMessageAnalysis
 
+from classes.wechatAnalysisCounter import WechatAnalysisCounter
+
 #Sample run command:
 #python3 main.py "Bb SHA"
 def main():
@@ -40,7 +42,10 @@ def main():
 
 	wechatMessageAnalysis =  WechatMessageAnalysis()
 	wechatMessageList = wechatMessageAnalysis.handleChatHistoryData(chatHistory)
-	wechatMessageAnalysis.printChatHistoryData(wechatMessageList)
+	#wechatMessageAnalysis.printChatHistoryData(wechatMessageList)
+
+	wechatMessageAnalysis.registerAnalysiser(WechatAnalysisCounter())
+	wechatMessageAnalysis.executeAnalysis(wechatMessageList)
 
 	wechatSqliteUtil.closeWechatDB()
 	print('Done')
