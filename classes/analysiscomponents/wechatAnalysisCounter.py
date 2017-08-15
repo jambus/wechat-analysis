@@ -18,7 +18,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 		validDataList = filter(userMessageFilter,dataList)
 
 		#map
-		userMapFun = lambda x:(x.sender,1)
+		userMapFun = lambda x:{x.sender:1}
 		userMappedList = map(userMapFun, validDataList) 
 
 		#reduce
