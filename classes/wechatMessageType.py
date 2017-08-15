@@ -4,8 +4,9 @@ class WechatMessageType(Enum):
 	TEXT = 1
 	SYSTEM_MESSAGE = 10000
 	VOICE = 34
+	VIDEO1 = 43
 	EMOTION = 47
-	VIDEO = 62
+	VIDEO2 = 62
 	CALL = 50
 	PICTURE = 3
 	POSITION = 48
