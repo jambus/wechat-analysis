@@ -23,7 +23,12 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 
 		#reduce
 		userReduceSum = lambda x,y:Counter(x) + Counter(y)
-		userReducedDict = reduce(userReduceSum, userMappedList) 
+		userReducedCounter = reduce(userReduceSum, userMappedList) 
 
-		print(userReducedDict)
+		topMessageUserList = userReducedCounter.most_common(5)
+		print('群里话最多的前',len(topMessageUserList),'名:')
+		for user in topMessageUserList:
+			print(user[0],'(',user[1],')\t',end='')
+		print()
+
 		pass
