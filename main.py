@@ -5,8 +5,9 @@ import sys
 import argparse
 
 from classes.wechatSqliteUtil import WechatSqliteUtil
-from classes.wechatMessageAnalysis import WechatMessageAnalysis
-from classes.wechatAnalysisCounter import WechatAnalysisCounter
+from classes.wechatMessageAnalysisProcessor import WechatMessageAnalysisProcessor
+
+from classes.analysiscomponents.wechatAnalysisCounter import WechatAnalysisCounter
 
 def parseArgs(sysArgs):
 	print('Input Paramters: ' + '\t'.join(sysArgs))
@@ -57,12 +58,12 @@ def main():
 		return None
 	chatHistory = wechatSqliteUtil.getChatHistoryByChatRoomTable(targetChatTable)
 
-	wechatMessageAnalysis =  WechatMessageAnalysis()
-	wechatMessageList = wechatMessageAnalysis.handleChatHistoryData(chatHistory)
-	wechatMessageAnalysis.printChatHistoryData(wechatMessageList)
+	wechatMessageAnalysisProcessor =  WechatMessageAnalysisProcessor()
+	wechatMessageList = wechatMessageAnalysisProcessor.handleChatHistoryData(chatHistory)
+	#wechatMessageAnalysisProcessor.printChatHistoryData(wechatMessageList)
 
-	wechatMessageAnalysis.registerAnalysiser(WechatAnalysisCounter())
-	wechatMessageAnalysis.executeAnalysis(wechatMessageList)
+	wechatMessageAnalysisProcessor.registerAnalysiser(WechatAnalysisCounter())
+	wechatMessageAnalysisProcessor.executeAnalysis(wechatMessageList)
 
 	wechatSqliteUtil.closeWechatDB()
 	print('Done')

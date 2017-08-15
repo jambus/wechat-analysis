@@ -4,7 +4,7 @@ from classes.wechatMessage import WechatMessage
 from classes.wechatMessageType import WechatMessageType
 from classes.wechatAnalysisInterface import WechatAnalysisInterface
 
-class WechatMessageAnalysis(object):
+class WechatMessageAnalysisProcessor(object):
 
 	def __init__(self):
 		self._analysiserList = []
@@ -37,7 +37,10 @@ class WechatMessageAnalysis(object):
 		if record[4] == 0:
 			return 'me'
 		else:
-			return record[1].split(':', 1)[0]
+			if record[3] in [WechatMessageType.VIDEO1.value,WechatMessageType.VIDEO2.value]:
+				return 'Unhandled sender for type VIDEO'
+			else:
+				return record[1].split(':', 1)[0]
 
 	def _getMessageBody(sef, record):
 		if record[4] == 0:
