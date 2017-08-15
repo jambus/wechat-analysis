@@ -22,14 +22,17 @@ class WechatMessageAnalysisProcessor(object):
 		return self._aliasNameDict
 
 	def _handleAliasToClearUnexpectedChars(self, aliasName):
-		if(not hasattr(self,'_aliasPattern')):
-			self._aliasPattern = re.compile(r'^\n\W(.+?)\x12.*')
-		result = self._aliasPattern.match(aliasName)
+		#if(not hasattr(self,'_aliasPattern')):
+		#	self._aliasPattern = re.compile(r'^\n.(.+?)(\x12.*|[^\x12]*)$')
+		#result = self._aliasPattern.match(aliasName)
 
-		if result == None:
-			return aliasName
-		else:
-			return result.group(1)
+		#if result == None:
+		#	return aliasName
+		#else:
+		#	return result.group(1)
+		start = 2
+		end = aliasName.find('\x12', start)
+		return aliasName[start:end]
 
 	def handleChatHistoryData(self,data):
 		if len(data) == 0:
