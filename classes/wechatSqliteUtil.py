@@ -4,11 +4,6 @@ import hashlib
 
 class WechatSqliteUtil(object):
 
-	# default wechat sqlite path
-	#_mm_path = './data/MM.sqlite'
-	#_contact__path = './data/WCDB_Contact.sqlite'
-	#_BbChatRoomNameHash = 'a562c223491ef22e6bb398e66a7ec84b'
-
 	def __init__(self, mmPath, contactPath):
 		if(mmPath == None):
 			self._mm_path = './data/MM.sqlite'
@@ -87,4 +82,6 @@ class WechatSqliteUtil(object):
 		self._cursorMM.execute("SELECT CreateTime,Message,Status,Type,Des FROM "+ chatRoomTable)
 		return self._cursorMM.fetchall()
 
-
+	def listFriends(self):
+		self._cursorContact.execute("SELECT userName, cast(dbContactRemark as TEXT) FROM Friend WHERE userName not like '%@chatroom';")
+		return self._cursorContact.fetchall()

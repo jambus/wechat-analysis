@@ -59,6 +59,10 @@ def main():
 	chatHistory = wechatSqliteUtil.getChatHistoryByChatRoomTable(targetChatTable)
 
 	wechatMessageAnalysisProcessor =  WechatMessageAnalysisProcessor()
+
+	friendList = wechatSqliteUtil.listFriends();
+	wechatMessageAnalysisProcessor.loadAliasNameList(friendList)
+
 	wechatMessageList = wechatMessageAnalysisProcessor.handleChatHistoryData(chatHistory)
 	#wechatMessageAnalysisProcessor.printChatHistoryData(wechatMessageList)
 

@@ -1,4 +1,5 @@
 import datetime as dt
+import re
 
 from classes.wechatMessage import WechatMessage
 from classes.wechatMessageType import WechatMessageType
@@ -8,7 +9,27 @@ class WechatMessageAnalysisProcessor(object):
 
 	def __init__(self):
 		self._analysiserList = []
+		self._aliasNameDict = {}
 		pass
+
+	def loadAliasNameList(self,data):
+		if len(data) == 0:
+			pass
+
+		for record in data:
+			self._aliasNameDict[record[0]] = self._handleAliasToClearUnexpectedChars(record[1])
+
+		return self._aliasNameDict
+
+	def _handleAliasToClearUnexpectedChars(self, aliasName):
+		if(not hasattr(self,'_aliasPattern')):
+			self._aliasPattern = re.compile(r'^\n\W(.+?)\x12.*')
+		result = self._aliasPattern.match(aliasName)
+
+		if result == None:
+			return aliasName
+		else:
+			return result.group(1)
 
 	def handleChatHistoryData(self,data):
 		if len(data) == 0:
@@ -33,14 +54,23 @@ class WechatMessageAnalysisProcessor(object):
 
 		return historyList
 
-	def _getMessageSender(sef, record):
+	def _getMessageSender(self, record):
 		if record[4] == 0:
 			return 'me'
 		else:
 			if record[3] in [WechatMessageType.VIDEO1.value,WechatMessageType.VIDEO2.value]:
 				return 'Unhandled sender for type VIDEO'
 			else:
-				return record[1].split(':', 1)[0]
+				return self._linkAliasName(record[1].split(':', 1)[0])
+
+	def _linkAliasName(self,wechatId):
+		if len(self._aliasNameDict) == 0:
+			return wechatId
+		else:
+			if(wechatId in self._aliasNameDict):
+				return self._aliasNameDict[wechatId]
+			else:
+				return wechatId
 
 	def _getMessageBody(sef, record):
 		if record[4] == 0:
