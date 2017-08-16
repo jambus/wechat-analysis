@@ -2,6 +2,8 @@ import sqlite3
 import re
 import hashlib
 
+from classes.wechatUtils import WechatUtils
+
 class WechatSqliteUtil(object):
 
 	def __init__(self, mmPath, contactPath):
@@ -55,8 +57,9 @@ class WechatSqliteUtil(object):
 		#print(roomList)
 
 		for table in roomList:
-			if targetChatRoomName in table[1]:
-				print('Find room ' + targetChatRoomName + ' , Room id is:'+ table[0])
+			clearnedChatRoomName = WechatUtils.handleContactRemarkUnexpectedChars(table[1])
+			if targetChatRoomName in clearnedChatRoomName:
+				print('Find room ' + targetChatRoomName + ' , Room id is:'+ table[0],' Room full name is:' + clearnedChatRoomName)
 				return table[0]
 
 		print('Room not found')

@@ -4,6 +4,7 @@ import re
 from classes.wechatMessage import WechatMessage
 from classes.wechatMessageType import WechatMessageType
 from classes.wechatAnalysisInterface import WechatAnalysisInterface
+from classes.wechatUtils import WechatUtils
 
 class WechatMessageAnalysisProcessor(object):
 
@@ -17,23 +18,11 @@ class WechatMessageAnalysisProcessor(object):
 			pass
 
 		for record in data:
-			self._aliasNameDict[record[0]] = self._handleAliasToClearUnexpectedChars(record[1])
+			self._aliasNameDict[record[0]] = WechatUtils.handleContactRemarkUnexpectedChars(record[1])
 
 		return self._aliasNameDict
 
-	def _handleAliasToClearUnexpectedChars(self, aliasName):
-		#if(not hasattr(self,'_aliasPattern')):
-		#	self._aliasPattern = re.compile(r'^\n.(.+?)(\x12.*|[^\x12]*)$')
-		#result = self._aliasPattern.match(aliasName)
-
-		#if result == None:
-		#	return aliasName
-		#else:
-		#	return result.group(1)
-		start = 2
-		end = aliasName.find('\x12', start)
-		return aliasName[start:end]
-
+	#Convert wechat sql result to WeChatMessage list
 	def handleChatHistoryData(self,data):
 		if len(data) == 0:
 			pass
@@ -106,8 +95,9 @@ class WechatMessageAnalysisProcessor(object):
 		if len(self._analysiserList) == 0:
 			pass
 
+		print('=====Start Anaylsis=====')
 		for anaylsiser in self._analysiserList:
 			anaylsiser.execute(dataList)
 
-		print('Anaylsis done')
+		print('=====End Anaylsis =====')
 
