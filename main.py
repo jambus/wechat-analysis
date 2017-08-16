@@ -8,6 +8,7 @@ from classes.wechatSqliteUtil import WechatSqliteUtil
 from classes.wechatMessageAnalysisProcessor import WechatMessageAnalysisProcessor
 
 from classes.analysiscomponents.wechatAnalysisCounter import WechatAnalysisCounter
+from classes.analysiscomponents.wechatAnalysisRedPackageCounter import WechatAnalysisRedPackageCounter
 
 def parseArgs(sysArgs):
 	print('Input Paramters: ' + '\t'.join(sysArgs))
@@ -67,6 +68,7 @@ def main():
 	#wechatMessageAnalysisProcessor.printChatHistoryData(wechatMessageList)
 
 	wechatMessageAnalysisProcessor.registerAnalysiser(WechatAnalysisCounter())
+	wechatMessageAnalysisProcessor.registerAnalysiser(WechatAnalysisRedPackageCounter())
 	wechatMessageAnalysisProcessor.executeAnalysis(wechatMessageList)
 
 	wechatSqliteUtil.closeWechatDB()
