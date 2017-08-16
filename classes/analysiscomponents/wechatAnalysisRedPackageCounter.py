@@ -13,22 +13,24 @@ class WechatAnalysisRedPackageCounter(WechatCommonAnalysiser):
 
 		#filter
 		validDataList = filter(self._isRedPackageMessage,dataList)
-
+		
 		#map
 		userMapFun = lambda x:{x.sender:1}
 		userMappedList = map(userMapFun, validDataList) 
 
 		#reduce
 		userReduceSum = lambda x,y:Counter(x) + Counter(y)
-		userReducedCounter = reduce(userReduceSum, userMappedList) 
+		userReducedCounter = reduce(userReduceSum, userMappedList,Counter({})) 
 
 		topMessageUserList = userReducedCounter.most_common(3)
-		print('群里红包数量发的最多的',len(topMessageUserList),'名:')
-		for user in topMessageUserList:
-			print(user[0],'(',user[1],')\t',end='')
-		print()
 
-		pass
+		if len(list(topMessageUserList)) == 0:
+			print('群里没有人发过红包')
+		else:
+			print('群里红包数量发的最多的',len(topMessageUserList),'名:')
+			for user in topMessageUserList:
+				print(user[0],'(',user[1],')\t',end='')
+			print()
 
 	def _isRedPackageMessage(self, record):
 		if record.type != WechatMessageType.LINK:

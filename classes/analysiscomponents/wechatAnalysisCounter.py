@@ -23,12 +23,16 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 
 		#reduce
 		userReduceSum = lambda x,y:Counter(x) + Counter(y)
-		userReducedCounter = reduce(userReduceSum, userMappedList) 
+		userReducedCounter = reduce(userReduceSum, userMappedList,Counter({})) 
 
 		topMessageUserList = userReducedCounter.most_common(3)
-		print('群里话最多的前',len(topMessageUserList),'名:')
-		for user in topMessageUserList:
-			print(user[0],'(',user[1],')\t',end='')
-		print()
+
+		if len(list(topMessageUserList)) == 0:
+			print('群里没有人说话')
+		else:
+			print('群里话最多的前',len(topMessageUserList),'名:')
+			for user in topMessageUserList:
+				print(user[0],'(',user[1],')\t',end='')
+			print()
 
 		pass
