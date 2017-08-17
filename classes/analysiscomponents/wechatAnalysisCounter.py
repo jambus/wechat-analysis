@@ -1,6 +1,3 @@
-from functools import reduce
-from collections import Counter
-
 from classes.wechatAnalysisInterface import WechatAnalysisInterface
 from classes.analysiscomponents.wechatCommonAnalysiser import WechatCommonAnalysiser
 from classes.wechatMessageType import WechatMessageType
@@ -17,13 +14,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 		userMessageFilter = lambda x: x.type in self.getWechatUserMessageTypeList()
 		validDataList = filter(userMessageFilter,dataList)
 
-		#map
-		userMapFun = lambda x:{x.sender:1}
-		userMappedList = map(userMapFun, validDataList) 
-
-		#reduce
-		userReduceSum = lambda x,y:Counter(x) + Counter(y)
-		userReducedCounter = reduce(userReduceSum, userMappedList,Counter({})) 
+		userReducedCounter = self.mapReduceCountsByList(validDataList)
 
 		topMessageUserList = userReducedCounter.most_common(3)
 

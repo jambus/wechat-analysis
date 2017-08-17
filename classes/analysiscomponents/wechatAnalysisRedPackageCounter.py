@@ -1,8 +1,5 @@
 import xml.etree.ElementTree as ET
 
-from functools import reduce
-from collections import Counter
-
 from classes.wechatMessageType import WechatMessageType
 from classes.analysiscomponents.wechatCommonAnalysiser import WechatCommonAnalysiser
 from classes.wechatUtils import WechatUtils
@@ -14,13 +11,7 @@ class WechatAnalysisRedPackageCounter(WechatCommonAnalysiser):
 		#filter
 		validDataList = filter(self._isRedPackageMessage,dataList)
 		
-		#map
-		userMapFun = lambda x:{x.sender:1}
-		userMappedList = map(userMapFun, validDataList) 
-
-		#reduce
-		userReduceSum = lambda x,y:Counter(x) + Counter(y)
-		userReducedCounter = reduce(userReduceSum, userMappedList,Counter({})) 
+		userReducedCounter = self.mapReduceCountsByList(validDataList)
 
 		topMessageUserList = userReducedCounter.most_common(3)
 
