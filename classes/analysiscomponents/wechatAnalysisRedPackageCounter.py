@@ -15,13 +15,7 @@ class WechatAnalysisRedPackageCounter(WechatCommonAnalysiser):
 
 		topMessageUserList = userReducedCounter.most_common(3)
 
-		if len(list(topMessageUserList)) == 0:
-			print('群里没有人发过红包')
-		else:
-			print('群里红包数量发的最多的',len(topMessageUserList),'名:')
-			for user in topMessageUserList:
-				print(user[0],'(',user[1],')\t',end='')
-			print()
+		self.printCountResultList(topMessageUserList,'发红包')
 
 	def _isRedPackageMessage(self, record):
 		if record.type != WechatMessageType.LINK:

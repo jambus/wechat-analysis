@@ -20,13 +20,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 
 		topMessageUserList = userReducedCounter.most_common(3)
 
-		if len(list(topMessageUserList)) == 0:
-			print('群里没有人说话')
-		else:
-			print('群里话最多的前',len(topMessageUserList),'名:')
-			for user in topMessageUserList:
-				print(user[0],'(',user[1],')\t',end='')
-			print()
+		self.printCountResultList(topMessageUserList,'说话')
 
 	def userWelcomeMessageCounts(self,dataList):
 
@@ -37,15 +31,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 
 		topMessageUserList = userReducedCounter.most_common(3)
 
-		if len(list(topMessageUserList)) == 0:
-			print('群里没有人说欢迎')
-		else:
-			print('群里欢迎最积极的前',len(topMessageUserList),'名:')
-			for user in topMessageUserList:
-				print(user[0],'(',user[1],')\t',end='')
-			print()
-
-
+		self.printCountResultList(topMessageUserList,'说欢迎')
 
 	def _isWelcomeMessage(self, record):
 		if record.type == WechatMessageType.TEXT:
@@ -62,13 +48,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 
 		topMessageUserList = userReducedCounter.most_common(3)
 
-		if len(list(topMessageUserList)) == 0:
-			print('群里没有人说生日快乐')
-		else:
-			print('群里生日快乐最积极的前',len(topMessageUserList),'名:')
-			for user in topMessageUserList:
-				print(user[0],'(',user[1],')\t',end='')
-			print()
+		self.printCountResultList(topMessageUserList,'说生日快乐')
 
 	def _isHappyBirthdayMessage(self, record):
 		if record.type == WechatMessageType.TEXT:

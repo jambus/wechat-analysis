@@ -32,3 +32,13 @@ class WechatCommonAnalysiser(WechatAnalysisInterface):
 		userReducedCounter = reduce(userReduceSum, userMappedList,Counter({})) 
 
 		return userReducedCounter
+
+	def printCountResultList(self, resultList, title):
+
+		if len(list(resultList)) == 0:
+			print('群里没有人',title)
+		else:
+			print('群里',title,'最积极的前',len(resultList),'名:')
+			for user in resultList:
+				print(user[0],'(',user[1],')\t',end='')
+			print()
