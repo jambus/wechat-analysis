@@ -31,7 +31,7 @@ class WechatUtils(object):
 			try:	
 				rootNode = ET.fromstring(content)
 			except ET.ParseError as args:
-				print ('It is not valid xml content (' , args,'):\n',content)
+				#print ('It is not valid xml content (' , args,'):\n',content)
 				rootNode = None
 			
 			return rootNode
