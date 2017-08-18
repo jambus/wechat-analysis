@@ -28,7 +28,7 @@ Option command:
 4. Count the top 3 thank boss message senders in group
 5. Count the top 3 red package senders in group
 
-### document Reference:
+### Document Reference:
 
 [https://daily.zhihu.com/story/8807166]()
 
