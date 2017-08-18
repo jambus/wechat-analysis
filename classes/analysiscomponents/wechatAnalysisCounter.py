@@ -8,6 +8,7 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 		self.userMessageCounts(dataList)
 		self.userWelcomeMessageCounts(dataList)
 		self.userHappyBirthdayMessageCounts(dataList)
+		self.userBossMessageCounts(dataList)
 		pass
 
 	def userMessageCounts(self,dataList):
@@ -53,5 +54,22 @@ class WechatAnalysisCounter(WechatCommonAnalysiser):
 	def _isHappyBirthdayMessage(self, record):
 		if record.type == WechatMessageType.TEXT:
 			if('happy birthday' in record.message.lower() or '生日快乐' in record.message or '[蛋糕]' in record.message or '[Cake]' in record.message or '🎂' in record.message):
+				return True
+		return False
+
+	def userBossMessageCounts(self,dataList):
+
+		#filter
+		validDataList = filter(self._isThankBossMessage,dataList)
+
+		userReducedCounter = self.mapReduceCountsByList(validDataList)
+
+		topMessageUserList = userReducedCounter.most_common(3)
+
+		self.printCountResultList(topMessageUserList,'感谢老板')
+
+	def _isThankBossMessage(self, record):
+		if record.type == WechatMessageType.TEXT:
+			if('boss' in record.message.lower() or '老板' in record.message):
 				return True
 		return False
