@@ -14,8 +14,11 @@
 `python3 main.py "XXX Wechat Group Name"`
 
 Option command:
+
 -o output.txt target output file path. Default, it will print in console
+
 -m MM.sqlite target the path of MM.sqlite file. Default, it will read under ./data folder
+
 -c WCDB_Contact.sqlite target the path of WCDB_Contact.sqlite file. Default it will read under ./data folder
 
 ### Current Feature Support
